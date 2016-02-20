@@ -1,15 +1,33 @@
 ## Put comments here that give an overall description of what your
 ## functions do
 
-## Write a short comment describing this function
+## Returns a list of functions that hold lexically scoped variables for the matrix value 
+## and potentially it's inverse. Setter/getters are created for this function to hold 
+## the inverse matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  inv <- NULL
+  getInverse <- function() inv
+  setInverse <- function(i) inv <<- i
+  set <- function(matrix) {
+    x <<- matrix
+    inv <<- NULL
+  }
+  get <- function() x
+  list(get=get, set=set, getInverse=getInverse, setInverse=setInverse)
 }
 
 
-## Write a short comment describing this function
+## Given a cacheMatrix, solve for the inverse if it's null or return the cached value
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  inv <- x$getInverse()
+  if(!is.null(inv)) {
+    message("Getting cache data")
+        return(inv)
+  }
+  matrix <- x$get()
+  inv <- solve(matrix, ...)
+  x$setInverse(inv)
+  inv
 }
